@@ -13,4 +13,11 @@ describe('Comment Model', () => {
         comment1._id = comment._id;
         assert.deepEqual(comment.toJSON(), comment1);
     });
+
+    it('userId is required', () => {
+        const comment = new Comment({});
+        const { errors } = comment.validateSync();
+        assert.equal(errors.userId.kind, 'required');
+        assert.equal(errors.comment.kind, 'required');
+    });
 });
