@@ -24,5 +24,5 @@ describe('project model', () => {
         assert.equal(errors.coverPhotoId.kind, 'required');
         assert.equal(project.completed, false);
 
-    })
+    });
 });
