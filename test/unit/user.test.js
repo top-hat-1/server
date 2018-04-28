@@ -21,5 +21,5 @@ describe('user model', () => {
         const { errors } = user.validateSync();
         assert.equal(errors.name.kind, 'required');
         assert.equal(errors.email.kind, 'required');
-    })
+    });
 });

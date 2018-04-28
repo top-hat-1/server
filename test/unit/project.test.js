@@ -5,7 +5,7 @@ const { Types } = require('mongoose');
 describe('project model', () => {
     it('project is a valid model', () => {
         const project1 = {
-            projectName: 'Firepit',
+            projectName: 'Fire-pit',
             dateAdded: new Date(),
             coverPhotoId: Types.ObjectId(),
             comments: [Types.ObjectId()],
@@ -16,4 +16,13 @@ describe('project model', () => {
         project1._id = project._id;
         assert.deepEqual(project.toJSON(), project1);
     });
+
+    it('projectName/coverPhotoId are required and completed comes back false', () => {
+        const project = new Project({});
+        const { errors } = project.validateSync();
+        assert.equal(errors.projectName.kind, 'required');
+        assert.equal(errors.coverPhotoId.kind, 'required');
+        assert.equal(project.completed, false);
+
+    })
 });
