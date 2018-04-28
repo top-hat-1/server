@@ -16,4 +16,10 @@ describe('user model', () => {
         assert.deepEqual(user.toJSON(), user1);
     });
 
+    it('name and email are required', () => {
+        const user = new User({});
+        const { errors } = user.validateSync();
+        assert.equal(errors.name.kind, 'required');
+        assert.equal(errors.email.kind, 'required');
+    })
 });
