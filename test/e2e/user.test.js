@@ -26,8 +26,8 @@ describe.only('user api', () => {
         return request  
             .post('/api/auth/signup')
             .send(newUser)
-            .then(({ body }) => newUser = body)
-    })
+            .then(({ body }) => newUser = body);
+    });
     
     it('saves and gets a user', () => {
         return request.post('/api/users')
@@ -44,12 +44,11 @@ describe.only('user api', () => {
     });
 
     it('updates user', () => {
-        userData.name = 'Joey';
-        return request.put(`/api/users/${userData._id}`)
-            .send(userData)
-            .set('Authorization', newUser.token)
+        newUser.name = 'Bill';
+        return request.put(`/api/users/${newUser._id}`)
+            .send(newUser)
             .then(({ body }) => {
-                assert.equal(body.name, 'Joey');
+                assert.equal(body.name, 'Bill');
             });
     });
 
