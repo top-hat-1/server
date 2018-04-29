@@ -63,6 +63,7 @@ describe.only('user api', () => {
 
     it('deletes user by id', () => {
         return request.delete(`/api/users/${newUser._id}`)
+            .send(newUser)
             .set('Authorization', newUser.token)
             .then(() => {
                 return User.findById(newUser._id);
