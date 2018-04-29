@@ -2,6 +2,7 @@ const { assert } = require('chai');
 const { Types } = require('mongoose');
 const request = require('./request');
 const { dropCollection } = require('./db');
+const User = require('../../lib/models/User');
 
 describe.only('user api', () => {
     
@@ -49,6 +50,17 @@ describe.only('user api', () => {
             .send(newUser)
             .then(({ body }) => {
                 assert.equal(body.name, 'Bill');
+            });
+    });
+
+    it('deletes user by id', () => {
+        return request.delete(`/api/users/${newUser._id}`)
+            .set('Authorization', newUser.token)
+            .then(() => {
+                return User.findById(newUser._id);
+            })
+            .then(found => {
+                assert.isNull(found);
             });
     });
 
