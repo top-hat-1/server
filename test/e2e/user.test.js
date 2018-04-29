@@ -53,6 +53,14 @@ describe.only('user api', () => {
             });
     });
 
+    it('gets all users', () => {
+        return request.get('/api/users')
+            .then(({ body }) => {
+                assert.equal(body[0]._id, newUser._id);
+                assert.equal(body[1]._id, userData._id);
+            });
+    });
+
     it('deletes user by id', () => {
         return request.delete(`/api/users/${newUser._id}`)
             .set('Authorization', newUser.token)
