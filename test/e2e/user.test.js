@@ -61,6 +61,15 @@ describe.only('user api', () => {
             });
     });
 
+    //not populating following yet
+    it.skip('gets user by id, populate following', () => {
+        userData.following.push(newUser._id);
+        return request.get(`/api/users/${userData._id}`)
+            .then(({ body }) => {
+                assert.equal(body.following[0].name, 'Bill');
+            });
+    });
+
     it('deletes user by id', () => {
         return request.delete(`/api/users/${newUser._id}`)
             .send(newUser)
@@ -74,7 +83,7 @@ describe.only('user api', () => {
     });
 
     
-
+    //not adding id to user following field
     it.skip('puts a user id into following array of user', () => {
         return request.post(`/api/users/${userData._id}/following`)
             .send(userData._id)
