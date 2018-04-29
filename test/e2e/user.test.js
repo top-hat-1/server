@@ -16,6 +16,19 @@ describe.only('user api', () => {
 
     };
     
+    let newUser = {
+        name: 'Billy',
+        email: 'bill@me.com',
+        password: 'abc'
+    };
+
+    before(() => {
+        return request  
+            .post('/api/auth/signup')
+            .send(newUser)
+            .then(({ body }) => newUser = body)
+    })
+    
     it('saves and gets a user', () => {
         return request.post('/api/users')
             .send(userData)
@@ -34,6 +47,7 @@ describe.only('user api', () => {
         userData.name = 'Joey';
         return request.put(`/api/users/${userData._id}`)
             .send(userData)
+            .set('Authorization', newUser.token)
             .then(({ body }) => {
                 assert.equal(body.name, 'Joey');
             });
