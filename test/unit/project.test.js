@@ -7,7 +7,7 @@ describe('project model', () => {
         const project1 = {
             projectName: 'Fire-pit',
             dateAdded: new Date(),
-            coverPhotoId: Types.ObjectId(),
+            coverPhotoUrl: 'www.google.com',
             comments: [Types.ObjectId()],
             completed: true
         };
@@ -21,7 +21,7 @@ describe('project model', () => {
         const project = new Project({});
         const { errors } = project.validateSync();
         assert.equal(errors.projectName.kind, 'required');
-        assert.equal(errors.coverPhotoId.kind, 'required');
+        // assert.equal(errors.coverPhotoUrl.kind, 'required');
         assert.equal(project.completed, false);
 
     });
