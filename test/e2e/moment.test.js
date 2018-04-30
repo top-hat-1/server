@@ -60,4 +60,11 @@ describe.only('moment api', () => {
                     });
             });
     });
+
+    it('gets a moment by id', () => {
+        return request.get(`/api/moments/${moment1._id}`)
+            .then(({ body }) => {
+                assert.deepEqual(body, moment1);
+            });
+    });
 });
