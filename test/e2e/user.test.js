@@ -31,6 +31,7 @@ describe.only('user api', () => {
     });
     
     it('saves and gets a user', () => {
+        userData.following.push(newUser._id);
         return request.post('/api/users')
             .send(userData)
             .then(({ body }) => {
@@ -61,9 +62,7 @@ describe.only('user api', () => {
             });
     });
 
-    //not populating following yet
-    it.skip('gets user by id, populate following', () => {
-        userData.following.push(newUser._id);
+    it('gets user by id, populate following', () => {
         return request.get(`/api/users/${userData._id}`)
             .then(({ body }) => {
                 assert.equal(body.following[0].name, 'Bill');
