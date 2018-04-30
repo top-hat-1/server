@@ -68,6 +68,14 @@ describe.only('user api', () => {
                 assert.equal(body.following[0].name, 'Bill');
             });
     });
+    
+    it('puts a user id into following array of user', () => {
+        return request.post(`/api/users/${userData._id}/following`)
+            .send(newUser)
+            .then(({ body }) => {
+                assert.equal(body, newUser._id);
+            });
+    });
 
     it('deletes user by id', () => {
         return request.delete(`/api/users/${newUser._id}`)
@@ -82,12 +90,4 @@ describe.only('user api', () => {
     });
 
     
-    //not adding id to user following field
-    it.skip('puts a user id into following array of user', () => {
-        return request.post(`/api/users/${userData._id}/following`)
-            .send(userData._id)
-            .then(({ body }) => {
-                assert.equal(body, [userData._id]);
-            });
-    });
 });
