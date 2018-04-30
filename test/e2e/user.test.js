@@ -4,7 +4,7 @@ const request = require('./request');
 const { dropCollection } = require('./db');
 const User = require('../../lib/models/User');
 
-describe.only('user api', () => {
+describe('user api', () => {
     
     before(() => dropCollection('users'));
 
@@ -23,14 +23,51 @@ describe.only('user api', () => {
         password: 'abc'
     };
 
+    let project1 = {
+        projectName: 'Bathroom',
+        coverPhotoUrl: 'www.google.com',
+        owner: null,
+        comments: [],
+    };
+
+    let project2 = {
+        projectName: 'Attic',
+        coverPhotoUrl: 'www.google2.com',
+        owner: null,
+        comments: [], 
+    };
+
     before(() => {
         return request  
             .post('/api/auth/signup')
             .send(newUser)
-            .then(({ body }) => newUser = body);
+            .then(({ body }) => {
+                project1.owner = body._id;
+                project2.owner = body._id;
+                newUser = body;
+            });
+    });
+
+    before(() => {
+        return request
+            .post('/api/projects')
+            .send(project1)
+            .then(({ body }) => {
+                project1 = body;
+            });
+    });
+
+    before(() => {
+        return request
+            .post('/api/projects')
+            .send(project2)
+            .then(({ body }) => {
+                project2 = body;
+            });
     });
     
     it('saves and gets a user', () => {
+        userData.following.push(newUser._id);
         return request.post('/api/users')
             .send(userData)
             .then(({ body }) => {
@@ -61,12 +98,26 @@ describe.only('user api', () => {
             });
     });
 
-    //not populating following yet
-    it.skip('gets user by id, populate following', () => {
-        userData.following.push(newUser._id);
+    it('gets user by id, populate following', () => {
         return request.get(`/api/users/${userData._id}`)
             .then(({ body }) => {
                 assert.equal(body.following[0].name, 'Bill');
+            });
+    });
+    
+    it('puts a user id into following array of user', () => {
+        return request.post(`/api/users/${userData._id}/following`)
+            .send(newUser)
+            .then(({ body }) => {
+                assert.equal(body, newUser._id);
+            });
+    });
+
+    it('gets all of the users projects', () => {
+        return request.get(`/api/users/${newUser._id}/projects`)
+            .then(({ body }) => {
+                assert.equal(body.projects[0].projectName, 'Bathroom');
+                assert.equal(body.projects[1].projectName, 'Attic');
             });
     });
 
@@ -83,12 +134,4 @@ describe.only('user api', () => {
     });
 
     
-    //not adding id to user following field
-    it.skip('puts a user id into following array of user', () => {
-        return request.post(`/api/users/${userData._id}/following`)
-            .send(userData._id)
-            .then(({ body }) => {
-                assert.equal(body, [userData._id]);
-            });
-    });
 });

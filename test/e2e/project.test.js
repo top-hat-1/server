@@ -4,7 +4,7 @@ const { Types } = require('mongoose');
 const { dropCollection } = require('./db');
 const Comment = require('../../lib/models/Comment');
 
-describe.skip('project api', () => {
+describe('project api', () => {
     before(() => dropCollection('projects'));
     beforeEach(() => dropCollection('users'));
     beforeEach(() => dropCollection('comment'));
@@ -12,14 +12,14 @@ describe.skip('project api', () => {
 
     let project1 = {
         projectName: 'Roof',
-        coverPhotoId: Types.ObjectId(),
+        coverPhotoUrl: 'www.yahoo.com',
         owner: Types.ObjectId(),
         comments: []
     };
 
     let project2 = {
         projectName: 'Floor',
-        coverPhotoId: Types.ObjectId(),
+        coverPhotoUrl: 'www.yahoo2.com',
         owner: Types.ObjectId(),
         comments: []
     };
@@ -56,7 +56,7 @@ describe.skip('project api', () => {
             .then(({ body }) => {
                 const { _id } = body;
                 assert.ok(_id);
-                assert.ok(body.coverPhotoId);
+                assert.ok(body.coverPhotoUrl);
                 assert.equal(project1.owner, userData._id);
                 assert.equal(body.comments[0], comment._id);
                 assert.equal(body.projectName, 'Roof');
@@ -80,7 +80,7 @@ describe.skip('project api', () => {
 
     });
 
-    it.skip('gets project by id', () => {
+    it('gets project by id', () => {
         return request.get(`/api/projects/${project1._id}`)
             .then(({ body }) => {
                 assert.deepEqual(body, project1);
