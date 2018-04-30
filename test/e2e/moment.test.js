@@ -2,6 +2,7 @@ const { assert } = require('chai');
 const { Types } = require('mongoose');
 const request = require('./request');
 const { dropCollection } = require('./db');
+const Moment = require('../../lib/models/Moment');
 
 describe.only('moment api', () => {
     
@@ -65,6 +66,17 @@ describe.only('moment api', () => {
         return request.get(`/api/moments/${moment1._id}`)
             .then(({ body }) => {
                 assert.deepEqual(body, moment1);
+            });
+    });
+
+    it('deletes moment by id', () => {
+        return request.delete(`/api/moments/${moment1._id}`)
+            .send(moment1)
+            .then(() => {
+                return Moment.findById(moment1._id);
+            })
+            .then(found => {
+                assert.isNull(found);
             });
     });
 });
