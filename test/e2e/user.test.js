@@ -31,6 +31,7 @@ describe('user api', () => {
     });
     
     it('saves and gets a user', () => {
+        userData.following.push(newUser._id);
         return request.post('/api/users')
             .send(userData)
             .then(({ body }) => {
@@ -61,12 +62,18 @@ describe('user api', () => {
             });
     });
 
-    //not populating following yet
-    it.skip('gets user by id, populate following', () => {
-        userData.following.push(newUser._id);
+    it('gets user by id, populate following', () => {
         return request.get(`/api/users/${userData._id}`)
             .then(({ body }) => {
                 assert.equal(body.following[0].name, 'Bill');
+            });
+    });
+    
+    it('puts a user id into following array of user', () => {
+        return request.post(`/api/users/${userData._id}/following`)
+            .send(newUser)
+            .then(({ body }) => {
+                assert.equal(body, newUser._id);
             });
     });
 
@@ -83,12 +90,4 @@ describe('user api', () => {
     });
 
     
-    //not adding id to user following field
-    it.skip('puts a user id into following array of user', () => {
-        return request.post(`/api/users/${userData._id}/following`)
-            .send(userData._id)
-            .then(({ body }) => {
-                assert.equal(body, [userData._id]);
-            });
-    });
 });
