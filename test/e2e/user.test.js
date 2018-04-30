@@ -23,11 +23,47 @@ describe('user api', () => {
         password: 'abc'
     };
 
+    let project1 = {
+        projectName: 'Bathroom',
+        coverPhotoUrl: 'www.google.com',
+        owner: null,
+        comments: [],
+    };
+
+    let project2 = {
+        projectName: 'Attic',
+        coverPhotoUrl: 'www.google2.com',
+        owner: null,
+        comments: [], 
+    };
+
     before(() => {
         return request  
             .post('/api/auth/signup')
             .send(newUser)
-            .then(({ body }) => newUser = body);
+            .then(({ body }) => {
+                project1.owner = body._id;
+                project2.owner = body._id;
+                newUser = body;
+            });
+    });
+
+    before(() => {
+        return request
+            .post('/api/projects')
+            .send(project1)
+            .then(({ body }) => {
+                project1 = body;
+            });
+    });
+
+    before(() => {
+        return request
+            .post('/api/projects')
+            .send(project2)
+            .then(({ body }) => {
+                project2 = body;
+            });
     });
     
     it('saves and gets a user', () => {
@@ -74,6 +110,14 @@ describe('user api', () => {
             .send(newUser)
             .then(({ body }) => {
                 assert.equal(body, newUser._id);
+            });
+    });
+
+    it('gets all of the users projects', () => {
+        return request.get(`/api/users/${newUser._id}/projects`)
+            .then(({ body }) => {
+                assert.equal(body.projects[0].projectName, 'Bathroom');
+                assert.equal(body.projects[1].projectName, 'Attic');
             });
     });
 
