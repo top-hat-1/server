@@ -14,6 +14,13 @@ describe.only('moment api', () => {
         comments: [Types.ObjectId()],
     };
 
+    let moment2 = {
+        projectId: Types.ObjectId(),
+        category: 'before',
+        caption: 'Bedroom',
+        comments: [Types.ObjectId()],
+    };
+
     let user1 = {
         name: 'Jim',
         email: 'Jim@me.com',
@@ -38,6 +45,19 @@ describe.only('moment api', () => {
                 assert.equal(category, 'after');
                 assert.equal(caption, 'Kitchen');
                 moment1 = body;
+            });
+    });
+
+    it('gets all moments', () => {
+        moment2.owner = user1._id;
+        return request.post('/api/moments')
+            .send(moment2)
+            .then(() => {
+                return request.get('/api/moments')
+                    .then(({ body }) => {
+                        assert.deepEqual(body[0].caption, 'Kitchen');
+                        assert.deepEqual(body[1].caption, 'Bedroom');
+                    });
             });
     });
 });
