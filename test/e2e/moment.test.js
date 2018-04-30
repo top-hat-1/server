@@ -7,6 +7,7 @@ const Moment = require('../../lib/models/Moment');
 describe.only('moment api', () => {
     
     before(() => dropCollection('moments'));
+    before(() => dropCollection('users'));
 
     let moment1 = {
         projectId: Types.ObjectId(),
@@ -68,6 +69,15 @@ describe.only('moment api', () => {
                 assert.deepEqual(body, moment1);
             });
     });
+    
+    it('updates a moment', () => {
+        moment1.category = 'before';
+        return request.put(`/api/moments/${moment1._id}`)
+            .send(moment1)
+            .then(({ body }) => {
+                assert.equal(body.category, 'before');
+            });
+    });
 
     it('deletes moment by id', () => {
         return request.delete(`/api/moments/${moment1._id}`)
@@ -79,4 +89,5 @@ describe.only('moment api', () => {
                 assert.isNull(found);
             });
     });
+
 });
