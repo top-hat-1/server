@@ -4,7 +4,7 @@ const request = require('./request');
 const { dropCollection } = require('./db');
 const Comment = require('../../lib/models/Comment');
 
-describe.skip('comment api', () => {
+describe.only('comment api', () => {
 
     before(() => dropCollection('comments'));
 
@@ -35,7 +35,7 @@ describe.skip('comment api', () => {
             });
     });
 
-    it.skip('gets all comments', () => {
+    it('gets all comments', () => {
         return request.post('/api/comments')
             .send(commentData2)
             .then(({ body }) => {
@@ -49,7 +49,8 @@ describe.skip('comment api', () => {
             );
     });
 
-    it.skip('deletes a comment', () => {
+    it('deletes a comment', function() {
+        this.timeout(3000);
         return request.delete(`/api/comments/${commentData._id}`)
             .then(() => {
                 return Comment.findById(commentData._id);
