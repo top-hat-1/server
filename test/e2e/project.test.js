@@ -4,7 +4,7 @@ const { Types } = require('mongoose');
 const { dropCollection } = require('./db');
 const Comment = require('../../lib/models/Comment');
 
-describe('project api', () => {
+describe.skip('project api', () => {
     before(() => dropCollection('projects'));
     beforeEach(() => dropCollection('users'));
     beforeEach(() => dropCollection('comment'));
