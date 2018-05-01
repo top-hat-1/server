@@ -2,7 +2,8 @@ const { assert } = require('chai');
 const request = require('./request');
 const { Types } = require('mongoose');
 const { dropCollection } = require('./db');
-const Comment = require('../../lib/models/Comment');
+// const Moment = require('../../lib/models/Moment');
+// const Comment = require('../../lib/models/Comment');
 
 describe.only('project api', () => {
     before(() => dropCollection('projects'));
@@ -35,6 +36,20 @@ describe.only('project api', () => {
         comment: 'Nice work'
     };
 
+    let moment1 = {
+        projectId: Types.ObjectId(),
+        category: 'after',
+        caption: 'Master Bath',
+        comments: [Types.ObjectId()],
+    };
+
+    let moment2 = {
+        projectId: Types.ObjectId(),
+        category: 'before',
+        caption: 'Pool',
+        comments: [Types.ObjectId()],
+    };
+
     before(() => {
         return request
             .post('/api/auth/signup')
@@ -50,6 +65,24 @@ describe.only('project api', () => {
             .post('/api/comments')
             .send(comment)
             .then(({ body }) => comment = body);
+    });
+
+    before(() => {
+        return request
+            .post('/api/moments')
+            .send(moment1)
+            .then(({ body }) => {
+                moment1 = body;
+            });
+    });
+
+    before(() => {
+        return request
+            .post('/api/moments')
+            .send(moment2)
+            .then(({ body }) => {
+                moment2 = body;
+            });
     });
 
     it('saves and gets project', () => {
@@ -89,6 +122,24 @@ describe.only('project api', () => {
         return request.get(`/api/projects/${project1._id}`)
             .then(({ body }) => {
                 assert.deepEqual(body, project1);
+            });
+    });
+
+    it('gets individual project with all moments', () => {
+        project1.owner = userData._id;
+        // return request.post('/api/projects')
+        //     .send(project1)
+        //     .set('Authorization', userData.token)
+        //     .then(({ body }) => {
+        moment1.projectId = project1._id;
+        return request.post('/api/moments')
+            .send(moment1)
+            .then(() => {
+                return request.get(`/api/projects/${project1._id}/moments`)
+                    .then(({ body }) => {
+                        assert.equal(body.moments[0].caption, 'Master Bath');
+                        assert.equal(body.moments[1].caption, 'Pool');
+                    }); 
             });
     });
 });
