@@ -58,3 +58,9 @@ post /api/auth/signin
 
 get /api/auth/verify
     requires token, if token exists returns { verified: true }
+
+
+## api/moments
+
+put /api/moments/:id
+    send id attached as owner in request.  Route checks that project owner's id is same as owner prop on moment being sent.  Returns 403 if it doesn't match.  Otherwise returns updated moment.
