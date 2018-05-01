@@ -4,7 +4,7 @@ const request = require('./request');
 const { dropCollection } = require('./db');
 const Moment = require('../../lib/models/Moment');
 
-describe('moment api', () => {
+describe.only('moment api', () => {
     
     before(() => dropCollection('moments'));
     before(() => dropCollection('users'));
@@ -29,12 +29,27 @@ describe('moment api', () => {
         password: 'abc'
     };
 
+    let project = {
+        projectName: 'stairwell',
+        coverPhotoUrl: 'www.google.com',
+        owner: null
+    };
+
     before(() => {
         return request
             .post('/api/auth/signup')
             .send(user1)
             .then(({ body }) => user1 = body);
     });
+
+    // before(() => {
+    //     return request
+    //         .post('/api/projects')
+    //         .send(project)
+    //         .then(({ body }) => {
+    //             project = body;
+    //         });
+    // });
 
     it('saves and gets a moment', () => {
         return request.post('/api/moments')
@@ -70,10 +85,27 @@ describe('moment api', () => {
             });
     });
     
-    it('updates a moment', () => {
+    // it('updates a moment', () => {
+    //     moment1.category = 'before';
+    //     moment1.owner = user1._id;
+    //     return request.put(`/api/moments/${moment1._id}`)
+    //         .send(moment1)
+    //         .then(({ body }) => {
+    //             assert.equal(body.category, 'before');
+    //         });
+    // });
+
+    it('updates a moment if project owner', () => {
         moment1.category = 'before';
-        return request.put(`/api/moments/${moment1._id}`)
-            .send(moment1)
+        project.owner = user1._id;
+        moment1.owner = user1._id;
+        return request.post('/api/projects')
+            .send(project)
+            .then(({ body }) => {
+                moment1.projectId = body._id;
+                return request.put(`/api/moments/${moment1._id}`)
+                    .send(moment1);
+            })
             .then(({ body }) => {
                 assert.equal(body.category, 'before');
             });

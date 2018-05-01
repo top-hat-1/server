@@ -58,3 +58,9 @@ post /api/auth/signin
 
 get /api/auth/verify
     requires token, if token exists returns { verified: true }
+
+
+## api/moments
+
+put /api/moments/:id
+    send email as momentOwner in request.  Route checks that project owner's email is same as momentOwner.  Returns 403 if it doesn't match.  Otherwise returns updated moment.
