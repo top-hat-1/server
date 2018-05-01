@@ -4,7 +4,7 @@ const request = require('./request');
 const { dropCollection } = require('./db');
 const Moment = require('../../lib/models/Moment');
 
-describe.only('moment api', () => {
+describe('moment api', () => {
     
     before(() => dropCollection('moments'));
     before(() => dropCollection('users'));
