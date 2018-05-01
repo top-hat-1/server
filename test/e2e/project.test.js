@@ -4,10 +4,10 @@ const { Types } = require('mongoose');
 const { dropCollection } = require('./db');
 const Comment = require('../../lib/models/Comment');
 
-describe('project api', () => {
+describe.only('project api', () => {
     before(() => dropCollection('projects'));
     beforeEach(() => dropCollection('users'));
-    beforeEach(() => dropCollection('comment'));
+    beforeEach(() => dropCollection('comments'));
 
 
     let project1 = {
@@ -39,12 +39,17 @@ describe('project api', () => {
         return request
             .post('/api/auth/signup')
             .send(userData)
-            .then(({ body }) => userData = body);
+            .then(({ body }) => {
+                userData = body;
+                comment.userId = body._id;
+            });
     });
 
     before(() => {
-        const newComment = new Comment(comment);
-        comment._id = newComment._id;
+        return request
+            .post('/api/comments')
+            .send(comment)
+            .then(({ body }) => comment = body);
     });
 
     it('saves and gets project', () => {
