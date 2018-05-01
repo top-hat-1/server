@@ -9,7 +9,7 @@ describe.only('project api', () => {
     before(() => dropCollection('projects'));
     beforeEach(() => dropCollection('users'));
     beforeEach(() => dropCollection('comments'));
-
+    beforeEach(() => dropCollection('moments'));
 
     let project1 = {
         projectName: 'Roof',
@@ -138,7 +138,6 @@ describe.only('project api', () => {
                 return request.get(`/api/projects/${project1._id}/moments`)
                     .then(({ body }) => {
                         assert.equal(body.moments[0].caption, 'Master Bath');
-                        assert.equal(body.moments[1].caption, 'Pool');
                     }); 
             });
     });
