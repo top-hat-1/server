@@ -63,4 +63,4 @@ get /api/auth/verify
 ## api/moments
 
 put /api/moments/:id
-    send email as momentOwner in request.  Route checks that project owner's email is same as momentOwner.  Returns 403 if it doesn't match.  Otherwise returns updated moment.
+    send id attached as owner in request.  Route checks that project owner's id is same as owner prop on moment being sent.  Returns 403 if it doesn't match.  Otherwise returns updated moment.
