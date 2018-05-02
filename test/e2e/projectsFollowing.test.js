@@ -4,7 +4,7 @@ const request = require('./request');
 const { dropCollection } = require('./db');
 
 
-describe.only('projects load', () => {
+describe('projects load', () => {
 
     before(() => dropCollection('users'));
     before(() =>  dropCollection('projects'));
