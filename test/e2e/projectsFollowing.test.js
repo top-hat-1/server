@@ -4,7 +4,7 @@ const request = require('./request');
 const { dropCollection } = require('./db');
 
 
-describe('projects load', () => {
+describe.only('projects load', () => {
 
     before(() => dropCollection('users'));
     before(() =>  dropCollection('projects'));
@@ -80,12 +80,10 @@ describe('projects load', () => {
             });
     });
 
-
-
-    it.skip('gets all projects of users you are following', () => {
+    it('gets all projects of users you are following', function() {
         return request.get(`/api/users/${user2._id}/following`)
             .then(({ body }) => {
-                assert.equal(body.length, 2);
+                assert.equal(body[0].length, 2);
             });
     });
 });
