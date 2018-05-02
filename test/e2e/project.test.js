@@ -37,6 +37,12 @@ describe.only('project api', () => {
         comment: 'Nice work'
     };
 
+    // let comment2 = {
+    //     projectId: Types.ObjectId(),
+    //     userId: userData._id,
+    //     comment: 'Good job'
+    // };
+
     let moment1 = {
         projectId: Types.ObjectId(),
         category: 'after',
@@ -67,6 +73,13 @@ describe.only('project api', () => {
             .send(comment1)
             .then(({ body }) => comment1 = body);
     });
+
+    // before(() => {
+    //     return request
+    //         .post('/api/comments')
+    //         .send(comment2)
+    //         .then(({ body }) => comment2 = body);
+    // });
 
     before(() => {
         return request
@@ -103,6 +116,23 @@ describe.only('project api', () => {
             });
     });
 
+    it('gets project by id', () => {
+        return request.get(`/api/projects/${project1._id}`)
+            .then(({ body }) => {
+                assert.deepEqual(body, project1);
+            });
+    });
+    
+    //route works but test does not work?
+    it('posts comment into project', () => {
+        return request.post(`/api/projects/${project1._id}/comments`)
+            .send(comment1)
+            .then(({ body }) => {
+                assert.deepEqual(body.comments[0], comment1._id);
+                assert.deepEqual(body.comments[1], comment1._id);
+            });
+    });
+
     it('gets all projects', () => {
         project2.owner = userData._id;
         return request.post('/api/projects')
@@ -119,12 +149,6 @@ describe.only('project api', () => {
 
     });
 
-    it('gets project by id', () => {
-        return request.get(`/api/projects/${project1._id}`)
-            .then(({ body }) => {
-                assert.deepEqual(body, project1);
-            });
-    });
 
     it('gets individual project with all moments', () => {
         project1.owner = userData._id;
