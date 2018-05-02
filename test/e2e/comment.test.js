@@ -9,11 +9,13 @@ describe('comment api', () => {
     before(() => dropCollection('comments'));
 
     let commentData = {
+        projectId: Types.ObjectId(),
         userId: Types.ObjectId(),
         comment: 'This is a comment'
     };
 
     let commentData2 = {
+        projectId: Types.ObjectId(),
         userId: Types.ObjectId(),
         comment: 'comment two'
     };
