@@ -4,7 +4,7 @@ const request = require('./request');
 const { dropCollection } = require('./db');
 
 
-describe.skip('projects load', () => {
+describe.only('projects load', () => {
 
     before(() => dropCollection('users'));
     before(() =>  dropCollection('projects'));
@@ -62,7 +62,6 @@ describe.skip('projects load', () => {
     };
 
     before(() => {
-        // user2.following.push(user1._id);
         return request.post('/api/auth/signup')
             .send(user2)
             .then(({ body }) => {
