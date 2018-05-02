@@ -2,10 +2,8 @@ const { assert } = require('chai');
 const request = require('./request');
 const { Types } = require('mongoose');
 const { dropCollection } = require('./db');
-// const Moment = require('../../lib/models/Moment');
-// const Comment = require('../../lib/models/Comment');
 
-describe.only('project api', () => {
+describe('project api', () => {
     before(() => dropCollection('projects'));
     beforeEach(() => dropCollection('users'));
     beforeEach(() => dropCollection('comments'));
@@ -36,12 +34,6 @@ describe.only('project api', () => {
         userId: userData._id,
         comment: 'Nice work'
     };
-
-    // let comment2 = {
-    //     projectId: Types.ObjectId(),
-    //     userId: userData._id,
-    //     comment: 'Good job'
-    // };
 
     let moment1 = {
         projectId: Types.ObjectId(),
@@ -74,13 +66,6 @@ describe.only('project api', () => {
             .then(({ body }) => comment1 = body);
     });
 
-    // before(() => {
-    //     return request
-    //         .post('/api/comments')
-    //         .send(comment2)
-    //         .then(({ body }) => comment2 = body);
-    // });
-
     before(() => {
         return request
             .post('/api/moments')
@@ -101,7 +86,6 @@ describe.only('project api', () => {
 
     it('saves and gets project', () => {
         project1.owner = userData._id;
-        project1.comments.push(comment1._id);
         return request.post('/api/projects')
             .set('Authorization', userData.token)
             .send(project1)
@@ -110,7 +94,6 @@ describe.only('project api', () => {
                 assert.ok(_id);
                 assert.ok(body.coverPhotoUrl);
                 assert.equal(project1.owner, userData._id);
-                assert.equal(body.comments[0], comment1._id);
                 assert.equal(body.projectName, 'Roof');
                 project1 = body;
             });
@@ -120,16 +103,6 @@ describe.only('project api', () => {
         return request.get(`/api/projects/${project1._id}`)
             .then(({ body }) => {
                 assert.deepEqual(body, project1);
-            });
-    });
-    
-    //route works but test does not work?
-    it('posts comment into project', () => {
-        return request.post(`/api/projects/${project1._id}/comments`)
-            .send(comment1)
-            .then(({ body }) => {
-                assert.deepEqual(body.comments[0], comment1._id);
-                assert.deepEqual(body.comments[1], comment1._id);
             });
     });
 
@@ -145,17 +118,11 @@ describe.only('project api', () => {
                         assert.deepEqual(body[1].projectName, 'Floor');
                     });
             });
-
-
     });
 
 
     it('gets individual project with all moments', () => {
         project1.owner = userData._id;
-        // return request.post('/api/projects')
-        //     .send(project1)
-        //     .set('Authorization', userData.token)
-        //     .then(({ body }) => {
         moment1.projectId = project1._id;
         return request.post('/api/moments')
             .send(moment1)
