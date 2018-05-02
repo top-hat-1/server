@@ -5,7 +5,7 @@ const { dropCollection } = require('./db');
 // const Moment = require('../../lib/models/Moment');
 // const Comment = require('../../lib/models/Comment');
 
-describe('project api', () => {
+describe.only('project api', () => {
     before(() => dropCollection('projects'));
     beforeEach(() => dropCollection('users'));
     beforeEach(() => dropCollection('comments'));
