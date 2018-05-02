@@ -2,10 +2,8 @@ const { assert } = require('chai');
 const request = require('./request');
 const { Types } = require('mongoose');
 const { dropCollection } = require('./db');
-// const Moment = require('../../lib/models/Moment');
-// const Comment = require('../../lib/models/Comment');
 
-describe.only('project api', () => {
+describe('project api', () => {
     before(() => dropCollection('projects'));
     beforeEach(() => dropCollection('users'));
     beforeEach(() => dropCollection('comments'));
@@ -31,7 +29,8 @@ describe.only('project api', () => {
         password: 'abc'
     };
 
-    let comment = {
+    let comment1 = {
+        projectId: Types.ObjectId(),
         userId: userData._id,
         comment: 'Nice work'
     };
@@ -56,15 +55,15 @@ describe.only('project api', () => {
             .send(userData)
             .then(({ body }) => {
                 userData = body;
-                comment.userId = body._id;
+                comment1.userId = body._id;
             });
     });
 
     before(() => {
         return request
             .post('/api/comments')
-            .send(comment)
-            .then(({ body }) => comment = body);
+            .send(comment1)
+            .then(({ body }) => comment1 = body);
     });
 
     before(() => {
@@ -87,7 +86,6 @@ describe.only('project api', () => {
 
     it('saves and gets project', () => {
         project1.owner = userData._id;
-        project1.comments.push(comment._id);
         return request.post('/api/projects')
             .set('Authorization', userData.token)
             .send(project1)
@@ -96,9 +94,15 @@ describe.only('project api', () => {
                 assert.ok(_id);
                 assert.ok(body.coverPhotoUrl);
                 assert.equal(project1.owner, userData._id);
-                assert.equal(body.comments[0], comment._id);
                 assert.equal(body.projectName, 'Roof');
                 project1 = body;
+            });
+    });
+
+    it('gets project by id', () => {
+        return request.get(`/api/projects/${project1._id}`)
+            .then(({ body }) => {
+                assert.deepEqual(body, project1);
             });
     });
 
@@ -114,23 +118,11 @@ describe.only('project api', () => {
                         assert.deepEqual(body[1].projectName, 'Floor');
                     });
             });
-
-
     });
 
-    it('gets project by id', () => {
-        return request.get(`/api/projects/${project1._id}`)
-            .then(({ body }) => {
-                assert.deepEqual(body, project1);
-            });
-    });
 
     it('gets individual project with all moments', () => {
         project1.owner = userData._id;
-        // return request.post('/api/projects')
-        //     .send(project1)
-        //     .set('Authorization', userData.token)
-        //     .then(({ body }) => {
         moment1.projectId = project1._id;
         return request.post('/api/moments')
             .send(moment1)
@@ -139,6 +131,18 @@ describe.only('project api', () => {
                     .then(({ body }) => {
                         assert.equal(body.moments[0].caption, 'Master Bath');
                     }); 
+            });
+    });
+
+    it('gets individual project with all comments', () => {
+        comment1.projectId = project1._id;
+        return request.post('/api/comments')
+            .send(comment1)
+            .then(() => {
+                return request.get(`/api/projects/${project1._id}/comments`)
+                    .then(({ body }) => {
+                        assert.equal(body.comments[0].comment, 'Nice work');
+                    });
             });
     });
 });

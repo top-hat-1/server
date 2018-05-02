@@ -42,15 +42,6 @@ describe('moment api', () => {
             .then(({ body }) => user1 = body);
     });
 
-    // before(() => {
-    //     return request
-    //         .post('/api/projects')
-    //         .send(project)
-    //         .then(({ body }) => {
-    //             project = body;
-    //         });
-    // });
-
     it('saves and gets a moment', () => {
         return request.post('/api/moments')
             .send(moment1)
@@ -84,16 +75,6 @@ describe('moment api', () => {
                 assert.deepEqual(body, moment1);
             });
     });
-    
-    // it('updates a moment', () => {
-    //     moment1.category = 'before';
-    //     moment1.owner = user1._id;
-    //     return request.put(`/api/moments/${moment1._id}`)
-    //         .send(moment1)
-    //         .then(({ body }) => {
-    //             assert.equal(body.category, 'before');
-    //         });
-    // });
 
     it('updates a moment if project owner', () => {
         moment1.category = 'before';
@@ -113,7 +94,6 @@ describe('moment api', () => {
 
     it('deletes moment by id', () => {
         return request.delete(`/api/moments/${moment1._id}`)
-            .send(moment1)
             .then(() => {
                 return Moment.findById(moment1._id);
             })
