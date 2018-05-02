@@ -69,21 +69,64 @@ describe.only('projects load', () => {
             });
     });
 
+    let user3 = {
+        name: 'Shawn',
+        email: 'shawn@me.com',
+        password: '234'
+    };
+
+    let project3 = {
+        projectName: 'paint',
+        coverPhotoUrl: 'www.paint.com',
+        owner: Types.ObjectId(),
+        comments: []
+    };
+
+    before(() => {
+        return request.post('/api/auth/signup')
+            .send(user3)
+            .then(({ body }) => {
+                project3.owner = body._id;
+                user3 = body;
+            });
+    });
+
+    before(() => {
+        return request.post('/api/projects')
+            .send(project3)
+            .then(({ body }) => {
+                project3 = body;
+            });
+    });
+
     before(() => {
         return request.post(`/api/users/${user2._id}/following`)
             .send(user1)
             .then(() => {
                 request.get(`/api/users/${user2._id}`)
                     .then(({ body }) => {
-                        assert.equal(body.following.length, 1);
+                        assert.equal(body.following.length, 2);
+                    });
+            });
+    });
+
+    before(() => {
+        return request.post(`/api/users/${user2._id}/following`)
+            .send(user3)
+            .then(() => {
+                request.get(`/api/users/${user2._id}`)
+                    .then(({ body }) => {
+                        assert.equal(body.following.length, 2);
                     });
             });
     });
 
     it('gets all projects of users you are following', function() {
+        this.timeout(3000);
         return request.get(`/api/users/${user2._id}/following`)
             .then(({ body }) => {
                 assert.equal(body[0].length, 2);
+                assert.equal(body[1].length, 1);
             });
     });
 });
