@@ -4,7 +4,7 @@ const request = require('./request');
 const { dropCollection } = require('./db');
 const User = require('../../lib/models/User');
 
-describe('user api', () => {
+describe.only('user api', () => {
     
     before(() => dropCollection('users'));
 
@@ -105,9 +105,11 @@ describe('user api', () => {
             });
     });
     
+    let followid = {};
     it('puts a user id into following array of user', () => {
+        followid['_id'] = newUser._id;
         return request.post(`/api/users/${userData._id}/following`)
-            .send(newUser)
+            .send(followid)
             .then(({ body }) => {
                 assert.equal(body, newUser._id);
             });
