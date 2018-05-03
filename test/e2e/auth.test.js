@@ -33,6 +33,7 @@ describe('Auth api', () => {
     it('verifies', () => {
         return request
             .get('/api/auth/verify')
+            .send(token)
             .set('Authorization', token)
             .then(({ body }) => {
                 assert.isOk(body.verified);
