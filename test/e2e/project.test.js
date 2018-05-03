@@ -129,7 +129,7 @@ describe('project api', () => {
             .then(() => {
                 return request.get(`/api/projects/${project1._id}/moments`)
                     .then(({ body }) => {
-                        assert.equal(body.moments[0].caption, 'Master Bath');
+                        assert.equal(body[0].caption, 'Master Bath');
                     }); 
             });
     });
@@ -141,7 +141,7 @@ describe('project api', () => {
             .then(() => {
                 return request.get(`/api/projects/${project1._id}/comments`)
                     .then(({ body }) => {
-                        assert.equal(body.comments[0].comment, 'Nice work');
+                        assert.equal(body[0].comment, 'Nice work');
                     });
             });
     });
