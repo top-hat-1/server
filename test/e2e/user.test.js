@@ -1,10 +1,9 @@
 const { assert } = require('chai');
-const { Types } = require('mongoose');
 const request = require('./request');
 const { dropCollection } = require('./db');
 const User = require('../../lib/models/User');
 
-describe.only('user api', () => {
+describe('user api', () => {
     
     before(() => dropCollection('users'));
 
