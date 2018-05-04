@@ -4,7 +4,7 @@ const request = require('./request');
 const { dropCollection } = require('./db');
 const Comment = require('../../lib/models/Comment');
 
-describe('comment api', () => {
+describe.skip('comment api', () => {
 
     before(() => dropCollection('comments'));
 

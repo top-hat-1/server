@@ -75,7 +75,7 @@ describe('user api', () => {
                 assert.ok(_id);
                 assert.equal(email, 'Joe@me.com');
                 assert.equal(name, 'Joe');
-                assert.deepEqual(hobbies, ['woodworking']);
+                assert.deepEqual(hobbies, 'woodworking');
                 assert.equal(photo, 'www.google.com');
             });
     });
