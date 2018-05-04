@@ -2,7 +2,7 @@ const Comment = require('../../lib/models/Comment');
 const { assert } = require('chai');
 const { Types } = require('mongoose');
 
-describe('Comment Model', () => {
+describe.skip('Comment Model', () => {
     it('comment is a valid model', () => {
         const comment1 = {
             userId: Types.ObjectId(),
