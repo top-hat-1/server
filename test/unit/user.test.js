@@ -2,7 +2,7 @@ const { assert } = require('chai');
 const User = require('../../lib/models/User');
 const { Types } = require('mongoose');
 
-describe('user model', () => {
+describe.skip('user model', () => {
     it('user is a valid model', () => {
         const user1 = {
             name: 'Bob',

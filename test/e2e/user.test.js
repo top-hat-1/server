@@ -1,5 +1,4 @@
 const { assert } = require('chai');
-const { Types } = require('mongoose');
 const request = require('./request');
 const { dropCollection } = require('./db');
 const User = require('../../lib/models/User');
@@ -76,7 +75,7 @@ describe('user api', () => {
                 assert.ok(_id);
                 assert.equal(email, 'Joe@me.com');
                 assert.equal(name, 'Joe');
-                assert.deepEqual(hobbies, ['woodworking']);
+                assert.deepEqual(hobbies, 'woodworking');
                 assert.equal(photo, 'www.google.com');
             });
     });
@@ -105,9 +104,11 @@ describe('user api', () => {
             });
     });
     
+    let followid = {};
     it('puts a user id into following array of user', () => {
+        followid['_id'] = newUser._id;
         return request.post(`/api/users/${userData._id}/following`)
-            .send(newUser)
+            .send(followid)
             .then(({ body }) => {
                 assert.equal(body, newUser._id);
             });
