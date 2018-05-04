@@ -4,20 +4,22 @@ const request = require('./request');
 const { dropCollection } = require('./db');
 const Comment = require('../../lib/models/Comment');
 
-describe.skip('comment api', () => {
+describe('comment api', () => {
 
     before(() => dropCollection('comments'));
 
     let commentData = {
         projectId: Types.ObjectId(),
         userId: Types.ObjectId(),
-        comment: 'This is a comment'
+        comment: 'This is a comment',
+        name: 'cj'
     };
 
     let commentData2 = {
         projectId: Types.ObjectId(),
         userId: Types.ObjectId(),
-        comment: 'comment two'
+        comment: 'comment two',
+        name: 'dodo'
     };
 
     it('adds and gets a comments', () => {

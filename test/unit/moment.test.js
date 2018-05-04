@@ -2,7 +2,7 @@ const { assert } = require('chai');
 const Moment = require('../../lib/models/Moment');
 const { Types } = require('mongoose');
 
-describe.skip('moment model', () => {
+describe('moment model', () => {
     let moment1 = {
         projectId: Types.ObjectId(),
         category: 'before',
