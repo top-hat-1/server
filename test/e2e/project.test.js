@@ -32,7 +32,8 @@ describe('project api', () => {
     let comment1 = {
         projectId: Types.ObjectId(),
         userId: userData._id,
-        comment: 'Nice work'
+        comment: 'Nice work',
+        name: 'cj'
     };
 
     let moment1 = {
@@ -114,8 +115,8 @@ describe('project api', () => {
             .then(() => {
                 return request.get('/api/projects')
                     .then(({ body }) => {
-                        assert.deepEqual(body[0].projectName, 'Roof');
-                        assert.deepEqual(body[1].projectName, 'Floor');
+                        assert.equal(body[0].projectName, 'Roof');
+                        assert.equal(body[1].projectName, 'Floor');
                     });
             });
     });
