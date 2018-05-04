@@ -117,8 +117,8 @@ describe('user api', () => {
     it('gets all of the users projects', () => {
         return request.get(`/api/users/${newUser._id}/projects`)
             .then(({ body }) => {
-                assert.equal(body.projects[0].projectName, 'Bathroom');
-                assert.equal(body.projects[1].projectName, 'Attic');
+                assert.equal(body[0].projectName, 'Bathroom');
+                assert.equal(body[1].projectName, 'Attic');
             });
     });
 
