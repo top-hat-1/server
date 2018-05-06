@@ -44,6 +44,7 @@ describe('moment api', () => {
 
     it('saves and gets a moment', () => {
         return request.post('/api/moments')
+            .set('Authorization', user1.token)
             .send(moment1)
             .then(({ body }) => {
                 const { _id, category, caption } = body;
@@ -59,6 +60,7 @@ describe('moment api', () => {
     it('gets all moments', () => {
         moment2.owner = user1._id;
         return request.post('/api/moments')
+            .set('Authorization', user1.token)
             .send(moment2)
             .then(() => {
                 return request.get('/api/moments')
@@ -82,6 +84,7 @@ describe('moment api', () => {
         project.owner = user1._id;
         moment1.owner = user1._id;
         return request.post('/api/projects')
+            .set('Authorization', user1.token)
             .send(project)
             .then(({ body }) => {
                 moment1.projectId = body._id;

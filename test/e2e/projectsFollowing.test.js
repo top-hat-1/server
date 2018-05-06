@@ -41,6 +41,7 @@ describe('projects load', () => {
 
     before(() => {
         return request.post('/api/projects')
+            .set('Authorization', user1.token)
             .send(project1)
             .then(({ body }) => {
                 project1 = body;
@@ -49,6 +50,7 @@ describe('projects load', () => {
 
     before(() => {
         return request.post('/api/projects')
+            .set('Authorization', user1.token)
             .send(project2)
             .then(({ body }) => {
                 project2 = body;
@@ -93,6 +95,7 @@ describe('projects load', () => {
 
     before(() => {
         return request.post('/api/projects')
+            .set('Authorization', user3.token)
             .send(project3)
             .then(({ body }) => {
                 project3 = body;
