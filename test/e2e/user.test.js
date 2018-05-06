@@ -50,6 +50,7 @@ describe('user api', () => {
     before(() => {
         return request
             .post('/api/projects')
+            .set('Authorization', newUser.token)
             .send(project1)
             .then(({ body }) => {
                 project1 = body;
@@ -59,6 +60,7 @@ describe('user api', () => {
     before(() => {
         return request
             .post('/api/projects')
+            .set('Authorization', newUser.token)
             .send(project2)
             .then(({ body }) => {
                 project2 = body;
