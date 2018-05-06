@@ -70,6 +70,7 @@ describe('project api', () => {
     before(() => {
         return request
             .post('/api/moments')
+            .set('Authorization', userData.token)
             .send(moment1)
             .then(({ body }) => {
                 moment1 = body;
@@ -79,6 +80,7 @@ describe('project api', () => {
     before(() => {
         return request
             .post('/api/moments')
+            .set('Authorization', userData.token)
             .send(moment2)
             .then(({ body }) => {
                 moment2 = body;
@@ -110,6 +112,7 @@ describe('project api', () => {
     it('gets all projects', () => {
         project2.owner = userData._id;
         return request.post('/api/projects')
+            .set('Authorization', userData.token)
             .send(project2)
             .set('Authorization', userData.token)
             .then(() => {
@@ -126,6 +129,7 @@ describe('project api', () => {
         project1.owner = userData._id;
         moment1.projectId = project1._id;
         return request.post('/api/moments')
+            .set('Authorization', userData.token)
             .send(moment1)
             .then(() => {
                 return request.get(`/api/projects/${project1._id}/moments`)
