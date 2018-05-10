@@ -1,6 +1,5 @@
 const { assert } = require('chai');
 const Project = require('../../lib/models/Project');
-const { Types } = require('mongoose');
 
 describe('project model', () => {
     it('project is a valid model', () => {
@@ -8,7 +7,6 @@ describe('project model', () => {
             projectName: 'Fire-pit',
             dateAdded: new Date(),
             coverPhotoUrl: 'www.google.com',
-            comments: [Types.ObjectId()],
             completed: true
         };
 
@@ -21,7 +19,7 @@ describe('project model', () => {
         const project = new Project({});
         const { errors } = project.validateSync();
         assert.equal(errors.projectName.kind, 'required');
-        // assert.equal(errors.coverPhotoUrl.kind, 'required');
+        assert.equal(errors.coverPhotoUrl.kind, 'required');
         assert.equal(project.completed, false);
 
     });

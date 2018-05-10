@@ -42,17 +42,9 @@ describe('moment api', () => {
             .then(({ body }) => user1 = body);
     });
 
-    // before(() => {
-    //     return request
-    //         .post('/api/projects')
-    //         .send(project)
-    //         .then(({ body }) => {
-    //             project = body;
-    //         });
-    // });
-
     it('saves and gets a moment', () => {
         return request.post('/api/moments')
+            .set('Authorization', user1.token)
             .send(moment1)
             .then(({ body }) => {
                 const { _id, category, caption } = body;
@@ -68,6 +60,7 @@ describe('moment api', () => {
     it('gets all moments', () => {
         moment2.owner = user1._id;
         return request.post('/api/moments')
+            .set('Authorization', user1.token)
             .send(moment2)
             .then(() => {
                 return request.get('/api/moments')
@@ -81,25 +74,17 @@ describe('moment api', () => {
     it('gets a moment by id', () => {
         return request.get(`/api/moments/${moment1._id}`)
             .then(({ body }) => {
-                assert.deepEqual(body, moment1);
+                assert.equal(body.category, 'after');
+                assert.equal(body.caption, 'Kitchen');
             });
     });
-    
-    // it('updates a moment', () => {
-    //     moment1.category = 'before';
-    //     moment1.owner = user1._id;
-    //     return request.put(`/api/moments/${moment1._id}`)
-    //         .send(moment1)
-    //         .then(({ body }) => {
-    //             assert.equal(body.category, 'before');
-    //         });
-    // });
 
     it('updates a moment if project owner', () => {
         moment1.category = 'before';
         project.owner = user1._id;
         moment1.owner = user1._id;
         return request.post('/api/projects')
+            .set('Authorization', user1.token)
             .send(project)
             .then(({ body }) => {
                 moment1.projectId = body._id;
@@ -113,7 +98,6 @@ describe('moment api', () => {
 
     it('deletes moment by id', () => {
         return request.delete(`/api/moments/${moment1._id}`)
-            .send(moment1)
             .then(() => {
                 return Moment.findById(moment1._id);
             })

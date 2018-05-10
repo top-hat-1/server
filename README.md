@@ -22,6 +22,9 @@ post - /api/users/:id/following
 
     :id in param is the user being added to. The user being sent is the user to add.
 
+get /api/users/:id/following
+    gets all projects for each person a user is following.
+
 ## api/projects
 
 post   /api/projects
@@ -29,6 +32,16 @@ post   /api/projects
 
 get /api/projects
     returns all projects
+
+get /api/projects/:id
+    gets project by id
+
+get /api/projects/:id/moments
+    gets individual project by id and all moments for that project
+
+get /api/projects/:id/comments
+    gets individual project with comments
+
 
 ## api/auth
 
@@ -62,5 +75,32 @@ get /api/auth/verify
 
 ## api/moments
 
+post /api/moments
+    saves a moment and returns it with it's id
+
+get /api/moments
+    returns all moments
+
+get /api/moments/:id
+    returns moment by id
+
 put /api/moments/:id
     send id attached as owner in request.  Route checks that project owner's id is same as owner prop on moment being sent.  Returns 403 if it doesn't match.  Otherwise returns updated moment.
+
+delete /api/moments/:id
+    deletes moment with id in param
+
+## api/comments
+
+post /api/comments
+    save and returns comment.
+
+get /api/comments
+    gets all comments
+
+get /api/comments/:id
+    gets comment by id
+
+delete /api/comments/:id
+    deletes comment by id
+    

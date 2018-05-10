@@ -1,5 +1,4 @@
 const { assert } = require('chai');
-const { Types } = require('mongoose');
 const request = require('./request');
 const { dropCollection } = require('./db');
 const User = require('../../lib/models/User');
@@ -51,6 +50,7 @@ describe('user api', () => {
     before(() => {
         return request
             .post('/api/projects')
+            .set('Authorization', newUser.token)
             .send(project1)
             .then(({ body }) => {
                 project1 = body;
@@ -60,6 +60,7 @@ describe('user api', () => {
     before(() => {
         return request
             .post('/api/projects')
+            .set('Authorization', newUser.token)
             .send(project2)
             .then(({ body }) => {
                 project2 = body;
@@ -76,7 +77,7 @@ describe('user api', () => {
                 assert.ok(_id);
                 assert.equal(email, 'Joe@me.com');
                 assert.equal(name, 'Joe');
-                assert.deepEqual(hobbies, ['woodworking']);
+                assert.deepEqual(hobbies, 'woodworking');
                 assert.equal(photo, 'www.google.com');
             });
     });
@@ -105,9 +106,11 @@ describe('user api', () => {
             });
     });
     
+    let followid = {};
     it('puts a user id into following array of user', () => {
+        followid['_id'] = newUser._id;
         return request.post(`/api/users/${userData._id}/following`)
-            .send(newUser)
+            .send(followid)
             .then(({ body }) => {
                 assert.equal(body, newUser._id);
             });
@@ -116,8 +119,8 @@ describe('user api', () => {
     it('gets all of the users projects', () => {
         return request.get(`/api/users/${newUser._id}/projects`)
             .then(({ body }) => {
-                assert.equal(body.projects[0].projectName, 'Bathroom');
-                assert.equal(body.projects[1].projectName, 'Attic');
+                assert.equal(body[0].projectName, 'Bathroom');
+                assert.equal(body[1].projectName, 'Attic');
             });
     });
 
